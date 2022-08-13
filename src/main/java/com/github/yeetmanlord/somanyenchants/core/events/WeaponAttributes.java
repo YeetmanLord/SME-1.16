@@ -1,0 +1,40 @@
+package com.github.yeetmanlord.somanyenchants.core.events;
+
+import com.github.yeetmanlord.somanyenchants.SoManyEnchants;
+import com.github.yeetmanlord.somanyenchants.core.config.Config;
+import com.github.yeetmanlord.somanyenchants.core.init.EnchantmentInit;
+import com.github.yeetmanlord.somanyenchants.core.util.AttributeHelper;
+
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+
+@EventBusSubscriber(modid = SoManyEnchants.MOD_ID, bus = Bus.FORGE)
+public class WeaponAttributes {
+
+	@SubscribeEvent
+	public static void mainhand(final LivingEquipmentChangeEvent event) {
+
+		if (event.getEntityLiving() instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+			ItemStack to = event.getTo();
+			ItemStack from = event.getFrom();
+			EquipmentSlotType slot = event.getSlot();
+
+			if (slot == EquipmentSlotType.MAINHAND) {
+
+				AttributeHelper.apply(EnchantmentInit.HEAVY_BLADE.get(), Attributes.ATTACK_SPEED, Config.heavyBlade, event, -0.1d);
+				AttributeHelper.apply(EnchantmentInit.LIGHT_BLADE.get(), Attributes.ATTACK_SPEED, Config.lightBlade, event, 0.5d);
+
+			}
+
+		}
+
+	}
+
+}

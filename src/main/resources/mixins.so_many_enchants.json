@@ -1,0 +1,38 @@
+{
+	"required": true,
+	"package": "com.github.yeetmanlord.somanyenchants.mixins",
+	"compatibilityLevel": "JAVA_8",
+	"refmap": "mixins.so_many_enchants.refmap.json",
+	"mixins": [
+		"enchants.MixinArrowDamageEnchantment",
+		"enchants.MixinDamageEnchantment",
+		"enchants.MixinDiggingEnchantment",
+		"enchants.MixinArrowKnockbackEnchantment",
+		"enchants.MixinArrowPiercingEnchantment",
+		"enchants.MixinDigDurabilityEnchantment",
+		"enchants.MixinFireAspectEnchantment",
+		"enchants.MixinFishingSpeedEnchantment",
+		"enchants.MixinKnockbackEnchantment",
+		"enchants.MixinLootBonusEnchantment",
+		"enchants.MixinOxygenEnchantment",
+		"enchants.MixinProtectionEnchantment",
+		"entity.MixinAttributes",
+		"entity.MixinVillagerTrades",
+		"enchants.MixinQuickChargeEnchantment",
+		"enchants.MixinSoulSpeedEnchantment",
+		"enchants.MixinSweepingEdgeEnchantment",
+		"enchants.MixinThornsEnchantment",
+		"enchants.MixinTridentImpalerEnchantment",
+		"enchants.MixinTridentLoyaltyEnchantment",
+		"enchants.MixinTridentRiptideEnchantment",
+		"MixinShulkerBoxSlot",
+		"MixinCombatRules",
+		"MixinItem",
+		"MixinAnvilMenu",
+		"MixinHopperTileEntity",
+		"enchants.MixinEnchantment"
+	],
+	"client": [
+	],
+	"minVersion": "0.8"
+}
