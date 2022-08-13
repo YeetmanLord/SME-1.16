@@ -270,7 +270,7 @@ public class EnchantedShulkerBoxTileEntity extends LockableLootTileEntity implem
 
 	}
 
-	public CompoundNBT save(CompoundNBT p_189515_1_) {
+	@Override public CompoundNBT save(CompoundNBT p_189515_1_) {
 
 		super.save(p_189515_1_);
 		return this.saveToNbt(p_189515_1_);

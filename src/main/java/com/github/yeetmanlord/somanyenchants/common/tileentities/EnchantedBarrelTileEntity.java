@@ -34,7 +34,7 @@ public class EnchantedBarrelTileEntity extends LockableLootTileEntity {
 		this(BlockEntityTypeInit.ENCHANTED_BARREL.get());
 	}
 
-	public CompoundNBT save(CompoundNBT p_189515_1_) {
+	@Override public CompoundNBT save(CompoundNBT p_189515_1_) {
 		super.save(p_189515_1_);
 		if (!this.trySaveLootTable(p_189515_1_)) {
 			ItemStackHelper.saveAllItems(p_189515_1_, this.items);
@@ -43,7 +43,7 @@ public class EnchantedBarrelTileEntity extends LockableLootTileEntity {
 		return p_189515_1_;
 	}
 
-	public void load(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
+	@Override public void load(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
 		super.load(p_230337_1_, p_230337_2_);
 		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		if (!this.tryLoadLootTable(p_230337_2_)) {
@@ -52,27 +52,27 @@ public class EnchantedBarrelTileEntity extends LockableLootTileEntity {
 
 	}
 
-	public int getContainerSize() {
+	@Override public int getContainerSize() {
 		return 36;
 	}
 
-	protected NonNullList<ItemStack> getItems() {
+	@Override protected NonNullList<ItemStack> getItems() {
 		return this.items;
 	}
 
-	protected void setItems(NonNullList<ItemStack> p_199721_1_) {
+	@Override protected void setItems(NonNullList<ItemStack> p_199721_1_) {
 		this.items = p_199721_1_;
 	}
 
-	protected ITextComponent getDefaultName() {
+	@Override protected ITextComponent getDefaultName() {
 		return new TranslationTextComponent("container.barrel");
 	}
 
-	protected Container createMenu(int p_213906_1_, PlayerInventory p_213906_2_) {
+	@Override protected Container createMenu(int p_213906_1_, PlayerInventory p_213906_2_) {
 		return EnchantedChestContainer.createGeneric9X4(p_213906_1_, p_213906_2_, this);
 	}
 
-	public void startOpen(PlayerEntity p_174889_1_) {
+	@Override public void startOpen(PlayerEntity p_174889_1_) {
 		if (!p_174889_1_.isSpectator()) {
 			if (this.openCount < 0) {
 				this.openCount = 0;
@@ -118,7 +118,7 @@ public class EnchantedBarrelTileEntity extends LockableLootTileEntity {
 
 	}
 
-	public void stopOpen(PlayerEntity p_174886_1_) {
+	@Override public void stopOpen(PlayerEntity p_174886_1_) {
 		if (!p_174886_1_.isSpectator()) {
 			--this.openCount;
 		}

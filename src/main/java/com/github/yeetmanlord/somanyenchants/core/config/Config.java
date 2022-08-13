@@ -215,26 +215,34 @@ public class Config {
 	}
 
 	private static void retry(CommentedFileConfig file, String key, EnchantmentConfig value) {
+
 		try {
 			value.maxLevel.set(file.getInt(key + ".maxLevel"));
 			value.isEnabled.set(file.get(key + ".isEnabled"));
-		} catch (WritingException exc) {
+		}
+		catch (WritingException exc) {
 			SoManyEnchants.LOGGER.error("Failed to load " + key + " key from config! Retrying...");
 			retry(file, key, value);
-		} catch (StackOverflowError overflow) {
+		}
+		catch (StackOverflowError overflow) {
 			SoManyEnchants.LOGGER.error("Failed");
 		}
+
 	}
 
 	private static void retry(CommentedFileConfig file) {
+
 		try {
 			villager.isEnabled.set(file.get("Enchanter Villager.isEnabled"));
-		} catch (WritingException exc) {
+		}
+		catch (WritingException exc) {
 			SoManyEnchants.LOGGER.error("Failed to load Enchanter Villager key from config! Retrying...");
 			retry(file);
-		} catch (StackOverflowError overflow) {
+		}
+		catch (StackOverflowError overflow) {
 			SoManyEnchants.LOGGER.error("Failed");
 		}
+
 	}
 
 	public static void load(CommentedFileConfig file) {
@@ -242,17 +250,22 @@ public class Config {
 		file.load();
 
 		configSections.forEach((key, value) -> {
+
 			try {
 				value.maxLevel.set(file.getInt(key + ".maxLevel"));
 				value.isEnabled.set(file.get(key + ".isEnabled"));
-			} catch (WritingException exc) {
+			}
+			catch (WritingException exc) {
 				SoManyEnchants.LOGGER.error("Failed to load " + key + " key from config! Retrying...");
 				retry(file, key, value);
 			}
+
 		});
+
 		try {
 			Config.villager.isEnabled.set(file.get("Enchanter Villager" + ".isEnabled"));
-		} catch (WritingException exc) {
+		}
+		catch (WritingException exc) {
 			SoManyEnchants.LOGGER.error("Failed to load Enchanter Villager key from config! Retrying...");
 			retry(file);
 		}
