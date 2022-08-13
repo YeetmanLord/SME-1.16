@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
-    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-        <listEntry value="/So_Many_Enchants"/>
-    </listAttribute>
-    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
-        <listEntry value="4"/>
-    </listAttribute>
-    <mapAttribute key="org.eclipse.debug.core.environmentVariables">
-        <mapEntry key="FORGE_GROUP" value="net.minecraftforge"/>
-        <mapEntry key="FORGE_VERSION" value="36.2.34"/>
-        <mapEntry key="MCP_MAPPINGS" value="official_1.16.5"/>
-        <mapEntry key="MCP_VERSION" value="20210115.111550"/>
-        <mapEntry key="MC_VERSION" value="1.16.5"/>
-        <mapEntry key="MOD_CLASSES" value="so_many_enchants%%C:\Users\Maximus Widmaier\Coding\So Many Enchants\So-Many-Enchants-1_16\So_Many_Enchants\bin\main;so_many_enchants%%C:\Users\Maximus Widmaier\Coding\So Many Enchants\So-Many-Enchants-1_16\So_Many_Enchants\bin\main"/>
-        <mapEntry key="assetDirectory" value="C:\Users\Maximus Widmaier\.gradle\caches\forge_gradle\assets"/>
-        <mapEntry key="assetIndex" value="1.16"/>
-        <mapEntry key="nativesDirectory" value="C:\Users\Maximus Widmaier\Coding\So Many Enchants\So-Many-Enchants-1_16\So_Many_Enchants\build\natives"/>
-        <mapEntry key="target" value="fmluserdevclient"/>
-    </mapAttribute>
-    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="net.minecraftforge.userdev.LaunchTesting"/>
-    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="So_Many_Enchants"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--mixin.config mixins.so_many_enchants.json"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="So_Many_Enchants"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dforge.logging.console.level=debug -Dforge.logging.markers=REGISTRIES &quot;-Dnet.minecraftforge.gradle.GradleStart.srg.srg-mcp=C:\Users\Maximus Widmaier\Coding\So Many Enchants\So-Many-Enchants-1_16\So_Many_Enchants\build\createSrgToMcp\output.srg&quot; -Dmixin.env.remapRefMap=true &quot;-Dmixin.env.refMapRemappingFile=C:\Users\Maximus Widmaier\Coding\So Many Enchants\So-Many-Enchants-1_16\So_Many_Enchants\build\createSrgToMcp\output.srg&quot; -Dforge.enabledGameTestNamespaces=so_many_enchants -XX:+IgnoreUnrecognizedVMOptions --add-exports=java.base/sun.security.util=ALL-UNNAMED --add-exports=jdk.naming.dns/com.sun.jndi.dns=java.naming --add-opens=java.base/java.util.jar=ALL-UNNAMED -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump &quot;-Dos.name=Windows 10&quot; -Dos.version=10.0"/>
-    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="C:\Users\Maximus Widmaier\Coding\So Many Enchants\So-Many-Enchants-1_16\So_Many_Enchants\run"/>
+  <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="So Many Enchants"/>
+  <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="net.minecraftforge.userdev.LaunchTesting"/>
+  <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dforge.logging.console.level=debug -Dforge.logging.markers=REGISTRIES &quot;-Dnet.minecraftforge.gradle.GradleStart.srg.srg-mcp=X:\Coding\So Many Enchants\So Many Enchants\build\createSrgToMcp\output.srg&quot; -Dmixin.env.remapRefMap=true &quot;-Dmixin.env.refMapRemappingFile=X:\Coding\So Many Enchants\So Many Enchants\build\createSrgToMcp\output.srg&quot; -XX:+IgnoreUnrecognizedVMOptions --add-exports=java.base/sun.security.util=ALL-UNNAMED --add-exports=jdk.naming.dns/com.sun.jndi.dns=java.naming --add-opens=java.base/java.util.jar=ALL-UNNAMED -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump &quot;-Dos.name=Windows 10&quot; -Dos.version=10.0"/>
+  <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--mixin.config mixins.so_many_enchants.json"/>
+  <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="X:\Coding\So Many Enchants\So Many Enchants\run"/>
+  <mapAttribute key="org.eclipse.debug.core.environmentVariables">
+    <mapEntry key="MOD_CLASSES" value="so_many_enchants%%X:\Coding\So Many Enchants\So Many Enchants\bin\main;so_many_enchants%%X:\Coding\So Many Enchants\So Many Enchants\bin\main"/>
+    <mapEntry key="MCP_MAPPINGS" value="official_1.16.5"/>
+    <mapEntry key="MCP_VERSION" value="20210115.111550"/>
+    <mapEntry key="FORGE_VERSION" value="36.2.20"/>
+    <mapEntry key="assetIndex" value="1.16"/>
+    <mapEntry key="assetDirectory" value="C:\Users\maxwi\.gradle\caches\forge_gradle\assets"/>
+    <mapEntry key="nativesDirectory" value="X:\Coding\So Many Enchants\So Many Enchants\build\natives"/>
+    <mapEntry key="FORGE_GROUP" value="net.minecraftforge"/>
+    <mapEntry key="target" value="fmluserdevclient"/>
+    <mapEntry key="MC_VERSION" value="1.16.5"/>
+  </mapAttribute>
 </launchConfiguration>

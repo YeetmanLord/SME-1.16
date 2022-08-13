@@ -1,1 +1,1 @@
-gradlew eclipse&gradlew genEclipseRuns&pause
+gradlew genEclipseRuns && gradlew eclipse && pause
