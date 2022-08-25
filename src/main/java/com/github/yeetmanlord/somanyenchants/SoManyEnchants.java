@@ -1,13 +1,10 @@
 package com.github.yeetmanlord.somanyenchants;
 
-import java.io.File;
 import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
 import com.github.yeetmanlord.somanyenchants.client.ConfigMenu;
 import com.github.yeetmanlord.somanyenchants.client.renderer.tileentity.EnchantedChestTileEntityRenderer;
 import com.github.yeetmanlord.somanyenchants.client.renderer.tileentity.EnchantedShulkerBoxTileEntityRenderer;
@@ -32,21 +29,19 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.DistExecutor.SafeRunnable;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
 
-@Mod("so_many_enchants")
-@Mod.EventBusSubscriber(modid = SoManyEnchants.MOD_ID, bus = Bus.MOD)
+@Mod("so_many_enchants") @Mod.EventBusSubscriber(modid = SoManyEnchants.MOD_ID, bus = Bus.MOD)
 public class SoManyEnchants {
+
+	public static final Scheduler MOD_SCHEDULER = new Scheduler(null);
 
 	public static final Logger LOGGER = LogManager.getLogger();
 
@@ -62,32 +57,24 @@ public class SoManyEnchants {
 
 		playerUtils = new HashMap<>();
 		instance = this;
-		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-		modEventBus.addListener(this::setup);
-
-		modEventBus.addListener(this::doClientStuff);
-
-		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.config);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SyncedServerConfig);
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> new SafeRunnable() {
+		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new DistExecutor.SafeRunnable() {
 
 			private static final long serialVersionUID = 5789682203789505777L;
 
 			@Override
 			public void run() {
 
-				final CommentedFileConfig file = CommentedFileConfig.builder(new File(FMLPaths.CONFIGDIR.get().resolve(
-						"so_many_enchants-common.toml").toString())).sync().autosave().writingMode(
-								WritingMode.REPLACE).build();
-				file.load();
-				Config.SyncedServerConfig.setConfig(file);
-				ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY,
-						() -> (mc, screen) -> new ConfigMenu());
+				ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> (mc, screen) -> new ConfigMenu());
+				Config.load();
 
 			}
 
 		});
+		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+		modEventBus.addListener(this::setup);
+
+		modEventBus.addListener(this::doClientStuff);
 
 		EnchantmentInit.ENCHANTMENTS.register(modEventBus);
 		ContainerTypeInit.CONTAINER_TYPES.register(modEventBus);
@@ -105,8 +92,7 @@ public class SoManyEnchants {
 
 	private void setup(final FMLCommonSetupEvent event) {
 
-		ItemGroup.TAB_DECORATIONS.setEnchantmentCategories(
-				new EnchantmentType[] { EnchantmentTypesInit.HOPPER, EnchantmentTypesInit.STORAGE, EnchantmentTypesInit.TRAPPED_CHEST, EnchantmentTypesInit.SMELTER });
+		ItemGroup.TAB_DECORATIONS.setEnchantmentCategories(new EnchantmentType[] { EnchantmentTypesInit.HOPPER, EnchantmentTypesInit.STORAGE, EnchantmentTypesInit.TRAPPED_CHEST, EnchantmentTypesInit.SMELTER });
 		LOGGER.info("PREINIT IS FUNCTIONING");
 		VillagerProfessionInit.fillTradeData();
 		NetworkHandler.init();
@@ -120,14 +106,10 @@ public class SoManyEnchants {
 
 	private void doClientStuff(final FMLClientSetupEvent event) {
 
-		ClientRegistry.bindTileEntityRenderer(BlockEntityTypeInit.ENCHANTED_SHULKER_BOX.get(),
-				EnchantedShulkerBoxTileEntityRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(BlockEntityTypeInit.ENCHANTED_CHEST.get(),
-				EnchantedChestTileEntityRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(BlockEntityTypeInit.TRAPPED_ENCHANTED_CHEST.get(),
-				EnchantedChestTileEntityRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(BlockEntityTypeInit.HIDDEN_TRAPPED_ENCHANTED_CHEST.get(),
-				EnchantedChestTileEntityRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(BlockEntityTypeInit.ENCHANTED_SHULKER_BOX.get(), EnchantedShulkerBoxTileEntityRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(BlockEntityTypeInit.ENCHANTED_CHEST.get(), EnchantedChestTileEntityRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(BlockEntityTypeInit.TRAPPED_ENCHANTED_CHEST.get(), EnchantedChestTileEntityRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(BlockEntityTypeInit.HIDDEN_TRAPPED_ENCHANTED_CHEST.get(), EnchantedChestTileEntityRenderer::new);
 
 	}
 

@@ -4,11 +4,11 @@ import com.github.yeetmanlord.somanyenchants.common.enchantments.ModEnchantment;
 import com.github.yeetmanlord.somanyenchants.core.config.Config;
 import com.github.yeetmanlord.somanyenchants.core.init.EnchantmentTypesInit;
 
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class FastSmeltEnchant extends ModEnchantment {
 
-	public FastSmeltEnchant(Rarity rarityIn, EquipmentSlotType... slots) {
+	public FastSmeltEnchant(Rarity rarityIn, EquipmentSlot... slots) {
 
 		super(rarityIn, EnchantmentTypesInit.SMELTER, Config.fastSmelt, slots);
 

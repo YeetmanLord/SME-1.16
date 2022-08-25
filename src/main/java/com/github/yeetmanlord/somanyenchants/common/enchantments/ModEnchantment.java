@@ -89,7 +89,7 @@ public class ModEnchantment extends Enchantment {
 	@Override
 	protected boolean checkCompatibility(Enchantment ench) {
 
-		if (ench instanceof ModEnchantment ) {
+		if (ench instanceof ModEnchantment) {
 			ModEnchantment modEnch = (ModEnchantment) ench;
 			return this.config.isEnabled.get() && modEnch.config.isEnabled.get() && super.checkCompatibility(ench);
 		}

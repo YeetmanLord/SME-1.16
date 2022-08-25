@@ -4,23 +4,29 @@ import com.github.yeetmanlord.somanyenchants.common.enchantments.ModEnchantment;
 import com.github.yeetmanlord.somanyenchants.core.config.Config;
 import com.github.yeetmanlord.somanyenchants.core.init.EnchantmentInit;
 
-import net.minecraft.enchantment.DamageEnchantment;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.TridentItem;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TridentItem;
+import net.minecraft.world.item.enchantment.DamageEnchantment;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class HeavyBladeEnchant extends ModEnchantment {
 
-	public HeavyBladeEnchant(Rarity rarityIn, EquipmentSlotType... slots) {
+	public HeavyBladeEnchant(Rarity rarityIn, EquipmentSlot... slots) {
 
-		super(rarityIn, EnchantmentType.WEAPON, Config.heavyBlade, slots);
+		super(rarityIn, EnchantmentCategory.WEAPON, Config.heavyBlade, slots);
 
 	}
 
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack) {
+
+		return this.category.canEnchant(stack.getItem());
+
+	}
 
 	@Override
 	public boolean canEnchant(ItemStack stack) {
@@ -52,7 +58,7 @@ public class HeavyBladeEnchant extends ModEnchantment {
 	}
 
 	@Override
-	public float getDamageBonus(int level, CreatureAttribute creatureType) {
+	public float getDamageBonus(int level, MobType creatureType) {
 
 		return (float) (Math.max(0, level - 1) * 2 + 4);
 

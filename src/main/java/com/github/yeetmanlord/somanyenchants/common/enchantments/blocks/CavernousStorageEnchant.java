@@ -4,11 +4,11 @@ import com.github.yeetmanlord.somanyenchants.common.enchantments.ModEnchantment;
 import com.github.yeetmanlord.somanyenchants.core.config.Config;
 import com.github.yeetmanlord.somanyenchants.core.init.EnchantmentTypesInit;
 
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class CavernousStorageEnchant extends ModEnchantment {
 
-	public CavernousStorageEnchant(Rarity rarityIn, EquipmentSlotType... slots) {
+	public CavernousStorageEnchant(Rarity rarityIn, EquipmentSlot... slots) {
 
 		super(rarityIn, EnchantmentTypesInit.STORAGE, Config.cavernousStorage, slots);
 

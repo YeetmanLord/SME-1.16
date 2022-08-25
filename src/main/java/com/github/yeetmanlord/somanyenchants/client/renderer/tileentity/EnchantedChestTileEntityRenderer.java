@@ -115,7 +115,7 @@ public class EnchantedChestTileEntityRenderer<T extends TileEntity & IChestLid> 
 			RenderMaterial material = this.getMaterial(tileEntity, chesttype);
 			IVertexBuilder vertexconsumer = material.buffer(renderBuff, RenderType::entityCutout);
 			if (flag1) {
-				if (chesttype == ChestType.LEFT) {
+				if (chesttype == ChestType.RIGHT) {
 					this.render(mStack, vertexconsumer, this.doubleLeftLid, this.doubleLeftLock, this.doubleLeftBottom,
 							f1, i, p_112368_);
 				} else {

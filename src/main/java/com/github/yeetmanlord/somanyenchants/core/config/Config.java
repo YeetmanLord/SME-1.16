@@ -1,22 +1,101 @@
 package com.github.yeetmanlord.somanyenchants.core.config;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingException;
 import com.github.yeetmanlord.somanyenchants.SoManyEnchants;
+import com.github.yeetmanlord.somanyenchants.core.network.NetworkHandler;
+import com.github.yeetmanlord.somanyenchants.core.network.message.ConfigSyncPacket;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
 
 public class Config {
 
+	public static final String CLIENT_CONFIG = "config/so_many_enchants-client.json";
+
+	@OnlyIn(Dist.CLIENT)
+	public static void load() {
+
+		Minecraft mc = Minecraft.getInstance();
+		Dist side = Dist.CLIENT;
+
+		if (mc.player != null && mc.player.getServer().isDedicatedServer()) {
+			side = Dist.DEDICATED_SERVER;
+		}
+
+		loadConfig(side);
+
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public static void unload() {
+
+		loadConfig(Dist.CLIENT);
+
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	private static void loadConfig(Dist side) {
+
+		if (side == Dist.DEDICATED_SERVER) {
+			NetworkHandler.CHANNEL.sendToServer(new ConfigSyncPacket(0));
+		}
+		else {
+
+			try {
+				File config = new File(CLIENT_CONFIG);
+
+				if (!config.exists()) {
+					config.createNewFile();
+				}
+
+				loadConfig(new String(Files.readAllBytes(Paths.get(CLIENT_CONFIG))));
+
+			}
+			catch (IOException exc) {
+				exc.printStackTrace();
+			}
+
+		}
+
+	}
+
+	public static void loadConfig(String string) {
+
+		JsonObject json = (JsonObject) new JsonParser().parse(string);
+
+		for (Entry<String, JsonElement> set : json.entrySet()) {
+			String key = set.getKey();
+			JsonObject sub = json.get(key).getAsJsonObject();
+			boolean enabled = sub.get("isEnabled").getAsBoolean();
+
+			if (key.equals("Villager")) {
+				villager.isEnabled.setNoUpdate(enabled);
+			}
+			else if (configSections.containsKey(key)) {
+				int maxLevel = sub.get("maxLevel").getAsInt();
+				configSections.get(key).maxLevel.setNoUpdate(maxLevel);
+				configSections.get(key).isEnabled.setNoUpdate(enabled);
+			}
+
+		}
+
+	}
+
 	public static boolean hasInit = false;
-
-	public static final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-
-	public static final ForgeConfigSpec config;
-
-	public static final ForgeConfigSpec SyncedServerConfig;
 
 	public static final HashMap<String, EnchantmentConfig> configSections = new HashMap<>();
 
@@ -205,69 +284,152 @@ public class Config {
 			waterBreathing = new EnchantmentConfig(1, "Water Breathing", 1, true);
 			weakness = new EnchantmentConfig(3, "Weakness", 3, true);
 
+			DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new DistExecutor.SafeRunnable() {
+
+				private static final long serialVersionUID = -822837623096255215L;
+
+				@Override
+				public void run() {
+
+					setDefaults(new File(CLIENT_CONFIG));
+					validate(new File(CLIENT_CONFIG));
+
+				}
+
+			});
+
 			Config.hasInit = true;
 		}
 
-		config = builder.build();
+	}
 
-		SyncedServerConfig = builder.build();
+	@OnlyIn(Dist.CLIENT)
+	public static void sendChanges() throws IOException {
+
+		JsonObject jsonToWrite = new JsonObject();
+
+		for (String confKey : configSections.keySet()) {
+			EnchantmentConfig conf = configSections.get(confKey);
+			JsonObject val = new JsonObject();
+			val.addProperty("isEnabled", conf.isEnabled.get());
+			val.addProperty("maxLevel", conf.maxLevel.get());
+			jsonToWrite.add(confKey, val);
+		}
+
+		JsonObject val = new JsonObject();
+		val.addProperty("isEnabled", villager.isEnabled.get());
+		jsonToWrite.add("Villager", val);
+
+		sendChanges(new File(CLIENT_CONFIG), jsonToWrite);
 
 	}
 
-	private static void retry(CommentedFileConfig file, String key, EnchantmentConfig value) {
+	public static void sendChanges(File file, JsonObject data) throws IOException {
+
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String json = gson.toJson(data);
+		FileWriter writer = new FileWriter(file);
+		writer.write(json);
+		writer.close();
+
+	}
+
+	public static void setDefaults(File file) {
+
+		if (file.exists()) {
+			return;
+		}
 
 		try {
-			value.maxLevel.set(file.getInt(key + ".maxLevel"));
-			value.isEnabled.set(file.get(key + ".isEnabled"));
+			file.createNewFile();
+
+			JsonObject jsonToWrite = new JsonObject();
+
+			for (String confKey : configSections.keySet()) {
+				EnchantmentConfig conf = configSections.get(confKey);
+				JsonObject val = new JsonObject();
+				val.addProperty("isEnabled", conf.isEnabled.get());
+				val.addProperty("maxLevel", conf.maxLevel.get());
+				jsonToWrite.add(confKey, val);
+			}
+
+			JsonObject val = new JsonObject();
+			val.addProperty("isEnabled", villager.isEnabled.get());
+			jsonToWrite.add("Villager", val);
+
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String json = gson.toJson(jsonToWrite);
+
+			FileWriter writer = new FileWriter(file);
+			writer.write(json);
+			writer.close();
 		}
-		catch (WritingException exc) {
-			SoManyEnchants.LOGGER.error("Failed to load " + key + " key from config! Retrying...");
-			retry(file, key, value);
-		}
-		catch (StackOverflowError overflow) {
-			SoManyEnchants.LOGGER.error("Failed");
+		catch (IOException e) {
+			e.printStackTrace();
 		}
 
 	}
 
-	private static void retry(CommentedFileConfig file) {
+	public static void validate(File file) {
 
-		try {
-			villager.isEnabled.set(file.get("Enchanter Villager.isEnabled"));
-		}
-		catch (WritingException exc) {
-			SoManyEnchants.LOGGER.error("Failed to load Enchanter Villager key from config! Retrying...");
-			retry(file);
-		}
-		catch (StackOverflowError overflow) {
-			SoManyEnchants.LOGGER.error("Failed");
-		}
-
-	}
-
-	public static void load(CommentedFileConfig file) {
-
-		file.load();
-
-		configSections.forEach((key, value) -> {
+		if (file.exists()) {
+			String content;
 
 			try {
-				value.maxLevel.set(file.getInt(key + ".maxLevel"));
-				value.isEnabled.set(file.get(key + ".isEnabled"));
+				content = new String(Files.readAllBytes(Paths.get(file.getPath())));
+				JsonObject json = (JsonObject) new JsonParser().parse(content);
+				boolean write = false;
+
+				for (String key : configSections.keySet()) {
+					EnchantmentConfig conf = configSections.get(key);
+
+					if (json.get(key) != null) {
+						write = true;
+						JsonObject val = new JsonObject();
+						val.addProperty("isEnabled", conf.isEnabled.get());
+						val.addProperty("maxLevel", conf.maxLevel.get());
+						json.add(key, val);
+					}
+
+					if (conf.maxLevel.get() > conf.absoluteMax) {
+						json.remove(key);
+						write = true;
+						JsonObject val = new JsonObject();
+						val.addProperty("isEnabled", conf.isEnabled.get());
+						val.addProperty("maxLevel", conf.absoluteMax);
+						json.add(key, val);
+					}
+
+				}
+
+				if (json.get("Villager") != null) {
+					write = true;
+					JsonObject val = new JsonObject();
+					VillagerConfig conf = villager;
+					val.addProperty("isEnabled", conf.isEnabled.get());
+					json.add("Villager", val);
+				}
+
+				if (write) {
+					SoManyEnchants.LOGGER.info("Config not valid, correcting");
+					SoManyEnchants.MOD_SCHEDULER.schedule(() -> () -> {
+
+						try {
+							sendChanges(file, json);
+						}
+						catch (IOException e) {
+							e.printStackTrace();
+						}
+
+					}, 1);
+
+				}
+
 			}
-			catch (WritingException exc) {
-				SoManyEnchants.LOGGER.error("Failed to load " + key + " key from config! Retrying...");
-				retry(file, key, value);
+			catch (IOException e) {
+				e.printStackTrace();
 			}
 
-		});
-
-		try {
-			Config.villager.isEnabled.set(file.get("Enchanter Villager" + ".isEnabled"));
-		}
-		catch (WritingException exc) {
-			SoManyEnchants.LOGGER.error("Failed to load Enchanter Villager key from config! Retrying...");
-			retry(file);
 		}
 
 	}
