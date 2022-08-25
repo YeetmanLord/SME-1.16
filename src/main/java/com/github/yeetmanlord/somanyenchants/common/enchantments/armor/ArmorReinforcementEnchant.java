@@ -5,9 +5,8 @@ import com.github.yeetmanlord.somanyenchants.core.config.Config;
 import com.github.yeetmanlord.somanyenchants.core.init.EnchantmentInit;
 
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class ArmorReinforcementEnchant extends ModEnchantment {
 
