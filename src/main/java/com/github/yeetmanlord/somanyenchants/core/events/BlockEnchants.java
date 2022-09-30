@@ -77,11 +77,61 @@ public class BlockEnchants {
 				return;
 			}
 
-			if (event.getPlacedBlock().getBlock() instanceof AbstractEnchantedSmelterBlock && (Config.fastSmelt.isEnabled.get() || Config.fuelEfficient.isEnabled.get() || Config.extraExperience.isEnabled.get())) {
+			if ((event.getPlacedBlock().getBlock() instanceof AbstractEnchantedSmelterBlock || event.getPlacedBlock().getBlock() instanceof AbstractFurnaceBlock) && (Config.fastSmelt.isEnabled.get() || Config.fuelEfficient.isEnabled.get() || Config.extraExperience.isEnabled.get())) {
 
-				if (Block.byItem(mainhand.getItem()) instanceof AbstractEnchantedSmelterBlock) {
+				if (event.getPlacedBlock().getBlock() instanceof AbstractEnchantedSmelterBlock) {
+					if (Block.byItem(mainhand.getItem()) instanceof AbstractEnchantedSmelterBlock) {
 
+						if (mainhand.isEnchanted()) {
+							AbstractEnchantedSmelterTileEntity tile = (AbstractEnchantedSmelterTileEntity) event.getWorld().getBlockEntity(event.getPos());
+
+							if (Config.fastSmelt.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.FAST_SMELT.get(), mainhand)) {
+								tile.addEnchantment(EnchantmentInit.FAST_SMELT.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.FAST_SMELT.get(), mainhand));
+							}
+
+							if (Config.fuelEfficient.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.FUEL_EFFICIENT.get(), mainhand)) {
+								tile.addEnchantment(EnchantmentInit.FUEL_EFFICIENT.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.FUEL_EFFICIENT.get(), mainhand));
+							}
+
+							if (Config.extraExperience.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.EXTRA_EXPERIENCE.get(), mainhand)) {
+								tile.addEnchantment(EnchantmentInit.EXTRA_EXPERIENCE.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.EXTRA_EXPERIENCE.get(), mainhand));
+							}
+
+						} else {
+							event.getWorld().setBlock(event.getPos(), ((AbstractEnchantedSmelterBlock) Block.byItem(mainhand.getItem())).getUnenchantedBlock().defaultBlockState().setValue(AbstractFurnaceBlock.FACING, event.getState().getValue(AbstractEnchantedSmelterBlock.FACING)), 1);
+						}
+
+					} else if (!(mainhand.getItem() instanceof BlockItem)) {
+
+						if (Block.byItem(offhand.getItem()) instanceof AbstractEnchantedSmelterBlock) {
+
+							if (offhand.isEnchanted()) {
+								AbstractEnchantedSmelterTileEntity tile = (AbstractEnchantedSmelterTileEntity) event.getWorld().getBlockEntity(event.getPos());
+
+								if (Config.fastSmelt.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.FAST_SMELT.get(), offhand)) {
+									tile.addEnchantment(EnchantmentInit.FAST_SMELT.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.FAST_SMELT.get(), offhand));
+								}
+
+								if (Config.fuelEfficient.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.FUEL_EFFICIENT.get(), offhand)) {
+									tile.addEnchantment(EnchantmentInit.FUEL_EFFICIENT.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.FUEL_EFFICIENT.get(), offhand));
+								}
+
+								if (Config.extraExperience.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.EXTRA_EXPERIENCE.get(), offhand)) {
+									tile.addEnchantment(EnchantmentInit.EXTRA_EXPERIENCE.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.EXTRA_EXPERIENCE.get(), offhand));
+								}
+
+							} else {
+								event.getWorld().setBlock(event.getPos(), ((AbstractEnchantedSmelterBlock) Block.byItem(mainhand.getItem())).getUnenchantedBlock().defaultBlockState().setValue(AbstractFurnaceBlock.FACING, event.getState().getValue(AbstractEnchantedSmelterBlock.FACING)), 1);
+							}
+
+						}
+
+					}
+				} else {
 					if (mainhand.isEnchanted()) {
+						event.getWorld().setBlock(event.getPos(), AbstractEnchantedSmelterBlock.getSmelterFromBlock(event.getPlacedBlock().getBlock())
+								.defaultBlockState().setValue(AbstractEnchantedSmelterBlock.FACING,
+										event.getState().getValue(AbstractFurnaceBlock.FACING)), 1);
 						AbstractEnchantedSmelterTileEntity tile = (AbstractEnchantedSmelterTileEntity) event.getWorld().getBlockEntity(event.getPos());
 
 						if (Config.fastSmelt.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.FAST_SMELT.get(), mainhand)) {
@@ -96,40 +146,29 @@ public class BlockEnchants {
 							tile.addEnchantment(EnchantmentInit.EXTRA_EXPERIENCE.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.EXTRA_EXPERIENCE.get(), mainhand));
 						}
 
-					}
-					else {
-						event.getWorld().setBlock(event.getPos(), ((AbstractEnchantedSmelterBlock) Block.byItem(mainhand.getItem())).getUnenchantedBlock().defaultBlockState().setValue(AbstractFurnaceBlock.FACING, event.getState().getValue(AbstractEnchantedSmelterBlock.FACING)), 1);
-					}
+					} else if (!(mainhand.getItem() instanceof BlockItem)) {
+						if (Block.byItem(offhand.getItem()) instanceof AbstractFurnaceBlock) {
+							if (offhand.isEnchanted()) {
+								event.getWorld().setBlock(event.getPos(), AbstractEnchantedSmelterBlock.getSmelterFromBlock(event.getPlacedBlock().getBlock())
+										.defaultBlockState().setValue(AbstractEnchantedSmelterBlock.FACING,
+												event.getState().getValue(AbstractFurnaceBlock.FACING)), 1);
+								AbstractEnchantedSmelterTileEntity tile = (AbstractEnchantedSmelterTileEntity) event.getWorld().getBlockEntity(event.getPos());
 
-				}
-				else if (!(mainhand.getItem() instanceof BlockItem)) {
+								if (Config.fastSmelt.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.FAST_SMELT.get(), offhand)) {
+									tile.addEnchantment(EnchantmentInit.FAST_SMELT.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.FAST_SMELT.get(), offhand));
+								}
 
-					if (Block.byItem(offhand.getItem()) instanceof AbstractEnchantedSmelterBlock) {
+								if (Config.fuelEfficient.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.FUEL_EFFICIENT.get(), offhand)) {
+									tile.addEnchantment(EnchantmentInit.FUEL_EFFICIENT.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.FUEL_EFFICIENT.get(), offhand));
+								}
 
-						if (offhand.isEnchanted()) {
-							AbstractEnchantedSmelterTileEntity tile = (AbstractEnchantedSmelterTileEntity) event.getWorld().getBlockEntity(event.getPos());
-
-							if (Config.fastSmelt.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.FAST_SMELT.get(), offhand)) {
-								tile.addEnchantment(EnchantmentInit.FAST_SMELT.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.FAST_SMELT.get(), offhand));
+								if (Config.extraExperience.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.EXTRA_EXPERIENCE.get(), offhand)) {
+									tile.addEnchantment(EnchantmentInit.EXTRA_EXPERIENCE.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.EXTRA_EXPERIENCE.get(), offhand));
+								}
 							}
-
-							if (Config.fuelEfficient.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.FUEL_EFFICIENT.get(), offhand)) {
-								tile.addEnchantment(EnchantmentInit.FUEL_EFFICIENT.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.FUEL_EFFICIENT.get(), offhand));
-							}
-
-							if (Config.extraExperience.isEnabled.get() && ModEnchantmentHelper.hasEnchant(EnchantmentInit.EXTRA_EXPERIENCE.get(), offhand)) {
-								tile.addEnchantment(EnchantmentInit.EXTRA_EXPERIENCE.get(), (short) ModEnchantmentHelper.getEnchantmentLevel(EnchantmentInit.EXTRA_EXPERIENCE.get(), offhand));
-							}
-
 						}
-						else {
-							event.getWorld().setBlock(event.getPos(), ((AbstractEnchantedSmelterBlock) Block.byItem(mainhand.getItem())).getUnenchantedBlock().defaultBlockState().setValue(AbstractFurnaceBlock.FACING, event.getState().getValue(AbstractEnchantedSmelterBlock.FACING)), 1);
-						}
-
 					}
-
 				}
-
 			}
 
 			else if (event.getPlacedBlock().getBlock() == Blocks.HOPPER && Config.fastHopper.isEnabled.get()) {

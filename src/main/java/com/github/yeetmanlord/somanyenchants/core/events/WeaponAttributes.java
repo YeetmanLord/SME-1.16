@@ -21,9 +21,6 @@ public class WeaponAttributes {
 	public static void mainhand(final LivingEquipmentChangeEvent event) {
 
 		if (event.getEntityLiving() instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-			ItemStack to = event.getTo();
-			ItemStack from = event.getFrom();
 			EquipmentSlotType slot = event.getSlot();
 
 			if (slot == EquipmentSlotType.MAINHAND) {

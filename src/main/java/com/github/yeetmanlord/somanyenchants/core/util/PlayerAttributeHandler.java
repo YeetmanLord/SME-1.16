@@ -67,7 +67,7 @@ public class PlayerAttributeHandler {
 
 	public static void reset(PlayerEntity player) {
 
-		Attribute[] attr = new Attribute[] { Attributes.ARMOR, Attributes.ARMOR_TOUGHNESS, Attributes.ATTACK_SPEED, Attributes.ATTACK_SPEED, Attributes.MAX_HEALTH, Attributes.KNOCKBACK_RESISTANCE, AttributeInit.ATTACK_DISTANCE.get(), ForgeMod.REACH_DISTANCE.get() };
+		Attribute[] attr = new Attribute[] { Attributes.ARMOR, Attributes.ARMOR_TOUGHNESS, Attributes.ATTACK_SPEED, Attributes.MAX_HEALTH, Attributes.KNOCKBACK_RESISTANCE, AttributeInit.ATTACK_DISTANCE.get(), ForgeMod.REACH_DISTANCE.get() };
 
 		for (ItemStack armorPiece : player.inventory.armor) {
 
